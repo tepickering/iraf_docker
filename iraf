@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# this script wraps the running of tpoint within its container and sets up the X windows configuration so
+# the graphics windows work properly. it maps the current working directory into the container as /home/tpoint/data
+# and runs the tpoint executable there. if you want to switch to a different directory on the host, you'll need to exit
+# and then rerun this script there.
+
+xhost + 127.0.0.1
+
+docker run -ti --rm \
+    -e DISPLAY=host.docker.internal:0 \
+    -v /tmp/.X11-unix:/tmp/.x11-unix \
+    -v $PWD:/home/iraf/data \
+    iraf:latest \
+    /bin/bash -c "source activate iraf27; cd /home/iraf; xgterm -sb -sl 5000 -geometry 80x48 -e cl"
