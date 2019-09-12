@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# this script wraps the running of tpoint within its container and sets up the X windows configuration so
-# the graphics windows work properly. it maps the current working directory into the container as /home/tpoint/data
-# and runs the tpoint executable there. if you want to switch to a different directory on the host, you'll need to exit
+# this script wraps the running of iraf within its container and sets up the X windows configuration so
+# the graphics windows work properly. it maps the current working directory into the container as /home/iraf/data
+# and runs 'xgterm -e cl' there. if you want to switch to a different directory on the host, you'll need to exit
 # and then rerun this script there.
 
 xhost + 127.0.0.1
@@ -12,4 +12,6 @@ docker run -ti --rm \
     -v /tmp/.X11-unix:/tmp/.x11-unix \
     -v $PWD:/home/iraf/data \
     iraf:latest \
-    /bin/bash -c "source activate iraf27; cd /home/iraf; xgterm -sb -sl 5000 -geometry 80x48 -e cl"
+    /bin/bash -c "cd /home/iraf; source .bashrc; conda activate iraf27; xgterm -sb -sl 5000 -geometry 80x48 -fn 10x20 -cr red -bg grey -e cl"
+
+xhost - 127.0.0.1
