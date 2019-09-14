@@ -1,0 +1,20 @@
+FROM tepickering/iraf-base:latest
+
+MAINTAINER T. E. Pickering "te_pickering@gmail.com"
+
+ARG USER_ID
+ARG GROUP_ID
+
+## Connection ports for controlling the UI:
+# VNC port:5901
+# noVNC webport, connect via http://IP:6901/?password=vncpassword
+ENV DISPLAY=:1 \
+    VNC_PORT=5901 \
+    NO_VNC_PORT=6901
+EXPOSE $VNC_PORT $NO_VNC_PORT
+
+RUN yum -y install epel-release vim emacs sudo which net-tools bzip2 numpy tigervnc-server xorg-x11-fonts* xulrunner icewm firefox
+RUN yum -y groups install "Fonts"
+RUN yum erase -y *power* *screensaver*
+RUN yum clean all
+RUN /bin/dbus-uuidgen > /etc/machine-id
