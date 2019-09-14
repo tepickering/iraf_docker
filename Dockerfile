@@ -1,5 +1,7 @@
 FROM tepickering/iraf-base:latest
 
+MAINTAINER T. E. Pickering "te_pickering@gmail.com"
+
 ARG USER_ID
 ARG GROUP_ID
 
