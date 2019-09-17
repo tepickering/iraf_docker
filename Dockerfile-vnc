@@ -1,9 +1,16 @@
+# This Dockerfile is used to build a headless vnc image based on Centos with AstroConda pre-installed
+
 FROM tepickering/iraf-base:latest
 
-MAINTAINER T. E. Pickering "te_pickering@gmail.com"
+MAINTAINER T. E. Pickering "te.pickering@gmail.com"
 
 ARG USER_ID
 ARG GROUP_ID
+
+RUN groupadd -f -g ${GROUP_ID} iraf && \
+    useradd -l -u ${USER_ID} -g iraf iraf
+
+RUN mkdir -p /home/iraf && chown -R iraf:iraf /home/iraf
 
 ## Connection ports for controlling the UI:
 # VNC port:5901
@@ -13,8 +20,45 @@ ENV DISPLAY=:1 \
     NO_VNC_PORT=6901
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
-RUN yum -y install epel-release vim emacs sudo which net-tools bzip2 numpy tigervnc-server xorg-x11-fonts* xulrunner icewm firefox
-RUN yum -y groups install "Fonts"
-RUN yum erase -y *power* *screensaver*
-RUN yum clean all
-RUN /bin/dbus-uuidgen > /etc/machine-id
+### Envrionment config
+ENV HOME=/home/iraf \
+    TERM=xgterm \
+    STARTUPDIR=/dockerstartup \
+    INST_SCRIPTS=/home/iraf/install \
+    NO_VNC_HOME=/home/iraf/noVNC \
+    VNC_COL_DEPTH=24 \
+    VNC_RESOLUTION=1280x1024 \
+    VNC_PW=vncpassword \
+    VNC_VIEW_ONLY=false
+WORKDIR $HOME
+
+### Add all install scripts for further steps
+ADD ./common/install/ $INST_SCRIPTS/
+ADD ./centos/install/ $INST_SCRIPTS/
+RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
+
+### Install some common tools
+RUN $INST_SCRIPTS/tools.sh
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+
+### Install xvnc-server & noVNC - HTML5 based VNC viewer
+RUN $INST_SCRIPTS/tigervnc.sh
+RUN $INST_SCRIPTS/no_vnc.sh
+
+### Install firefox and chrome browser
+RUN $INST_SCRIPTS/firefox.sh
+RUN $INST_SCRIPTS/chrome.sh
+
+### Install IceWM UI
+RUN $INST_SCRIPTS/icewm_ui.sh
+ADD ./centos/icewm/ $HOME/
+
+### configure startup
+RUN $INST_SCRIPTS/libnss_wrapper.sh
+ADD ./common/scripts $STARTUPDIR
+RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
+
+USER iraf
+
+ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
+CMD ["--wait"]
