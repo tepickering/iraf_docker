@@ -1,7 +1,14 @@
-FROM ubuntu:18.04
+FROM tepickering/iraf-community:latest
 
 MAINTAINER T. E. Pickering "te.pickering@gmail.com"
 
-RUN apt -y update && apt -y upgrade && \
-apt -y install wget xterm saods9 tclxml cpl-plugin-giraf cpl-plugin-giraf-calib cpl-plugin-giraf-doc iraf iraf-dev iraf-noao \
-iraf-noao-dev iraf-rvsao iraf-wcstools python-pyraf python3-pyraf
+ARG USER_ID
+ARG GROUP_ID
+
+RUN groupadd -f -g ${GROUP_ID} iraf && \
+    useradd -l -u ${USER_ID} -g iraf iraf
+
+RUN mkdir -p /home/iraf && chown -R iraf:iraf /home/iraf
+
+USER iraf
+ENV HOME /home/iraf

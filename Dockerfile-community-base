@@ -1,0 +1,7 @@
+FROM ubuntu:18.04
+
+MAINTAINER T. E. Pickering "te.pickering@gmail.com"
+
+RUN apt -y update && apt -y upgrade && \
+apt -y install wget xterm saods9 tclxml cpl-plugin-giraf cpl-plugin-giraf-calib cpl-plugin-giraf-doc iraf iraf-dev iraf-noao \
+iraf-noao-dev iraf-rvsao iraf-wcstools python-pyraf python3-pyraf
