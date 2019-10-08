@@ -1,6 +1,6 @@
 FROM centos:7
 
-MAINTAINER T. E. Pickering "te_pickering@gmail.com"
+MAINTAINER T. E. Pickering "te.pickering@gmail.com"
 
 RUN yum -y update && \
 yum -y install wget libX11 libX11.i686 libXft libXft.i686
