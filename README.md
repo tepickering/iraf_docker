@@ -1,6 +1,6 @@
 # Docker utilities and scripts to run IRAF and PyRAF
 
-These tools help build and run a Docker image containing the full [AstroConda](https://astroconda.readthedocs.io/en/latest/) python 2.7/PyRAF/IRAF legacy stack. The two main sticking points with running IRAF and PyRaf within a docker container are:
+These tools help build and run Docker images containing the full [AstroConda](https://astroconda.readthedocs.io/en/latest/) python 2.7/PyRAF/IRAF legacy stack or the [IRAF Community](https://github.com/iraf-community/iraf) Debian/Ubuntu packages. The two main sticking points with running IRAF and PyRaf within a docker container are:
 
 1. Forwarding X11 from the container into the host environment
 2. Accessing files on the host and managing permissions between the host and container
@@ -9,9 +9,20 @@ The first point can be addressed when the container is run to configure the DISP
 
 ## Instructions
 
-First, obviously, you need to have Docker installed. The free community edition for all supported platforms can be found at [Docker Hub](https://hub.docker.com/search/?type=edition&offering=community). The `build.sh` script facilitates the building of the container.
+First, obviously, you need to have Docker installed. The free community edition for all supported platforms can be found at [Docker Hub](https://hub.docker.com/search/?type=edition&offering=community). A set of build scripts facilitate the building of the containers:
 
-Once the container is built, the `iraf` and `pyraf` scripts facilitate running the container. Each script maps the directory from which it's run into `/home/iraf/data` within the container. Anything you want to save must be saved there. All other directories within the container are reset every time the container is run. If you want to work in a different directory on your host machine, you will need to run one of the scripts there to start another container.
+* `build.sh` -- Pulls `tepickering/iraf-base` from Docker Hub and builds a container with the permissions and ownership set to your uid/gid. This uses the AstroConda IRAF stack and includes the STSDAS package as well as the `x11iraf` tools like `ximtool` and `xgterm`. PyRAF is also provided and runs under python 2.7.x.
+* `build_community.sh` -- Pulls `tepickering/iraf-community` from Docker Hub and builds a personalized container from that. This uses the IRAF Community Debian/Ubuntu packages which don't include things like STSDAS or `x11iraf`, but does fix some of the known bugs in the final IRAF 2.16.2 release. The PyRAF provided here runs under python 3.6.x.
+* `build_vnc.sh` -- This is a work-in-progress to build a full IRAF scientific desktop that is accessible via VNC.
+
+Once the containers are built, a set of scripts are provided to facilitate running the containers:
+
+* `iraf` -- Runs `cl` within a `xgterm` window from the container built by `build.sh`.
+* `iraf-community` -- Runs `irafcl` within a `xterm` window from the container built by `build.sh`.
+* `pyraf2` -- Runs PyRAF under python 2.7.x as provided by AstroConda.
+* `pyraf3` -- Runs PyRAF under python 3.6.x as provided by the IRAF Community Debian/Ubuntu `python3-pyraf` package.
+
+Each script maps the directory from which it's run into `/home/iraf/data` within the container. Anything you want to save must be saved there. All other directories within the container are reset every time the container is run. If you want to work in a different directory on your host machine, you will need to run one of the scripts there to start another container.
 
 ## Known Issues
 
