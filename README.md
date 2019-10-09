@@ -18,7 +18,7 @@ First, obviously, you need to have Docker installed. The free community edition 
 Once the containers are built, a set of scripts are provided to facilitate running the containers:
 
 * `iraf` -- Runs `cl` within a `xgterm` window from the container built by `build.sh`.
-* `iraf-community` -- Runs `irafcl` within a `xterm` window from the container built by `build.sh`.
+* `iraf-community` -- Runs `irafcl` within a `xterm` window from the container built by `build_community.sh`.
 * `pyraf2` -- Runs PyRAF under python 2.7.x as provided by AstroConda.
 * `pyraf3` -- Runs PyRAF under python 3.6.x as provided by the IRAF Community Debian/Ubuntu `python3-pyraf` package.
 
