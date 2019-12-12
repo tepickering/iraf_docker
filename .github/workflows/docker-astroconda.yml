@@ -1,0 +1,14 @@
+name: Publish AstroConda base image to Docker Hub
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Publish AstroConda base to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: tepickering/iraf-base
+        username: ${{ secrets.DOCKER_USER }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+        dockerfile: Dockerfile-base
