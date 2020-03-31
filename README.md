@@ -24,6 +24,8 @@ Once the containers are built, a set of scripts are provided to facilitate runni
 
 Each script maps the directory from which it's run into `/home/iraf/data` within the container. Anything you want to save must be saved there. All other directories within the container are reset every time the container is run. If you want to work in a different directory on your host machine, you will need to run one of the scripts there to start another container.
 
+Also note, any `ds9` or `ximtool` windows must be opened from the IRAF/PyRAF command-line so that the container's version is used. There might be a way to hack things so that a containerized IRAF can talk to `ds9` running outside of the container, but I haven't explored that. Much easier to ust do `!ds9 &` from the CL...
+
 ## Known Issues
 
 * Because `/home/iraf` in the container is reset every time the container is run, the `epar` settings are not saved between sessions. This is either a blessing or a curse depending on your use case. One advantage of this scheme is that every IRAF/PyRAF session you run is completely separate from any other. Thus `epar` done in one session does not affect any others. Having been bitten by that several times in the past, I rather consider it a blessing.
