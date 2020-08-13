@@ -12,6 +12,17 @@ docker run -ti --rm \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v $PWD:/home/iraf/data \
     iraf:latest \
-    /bin/bash -c "cd /home/iraf; source .bashrc; conda activate iraf27; xgterm -sb -sl 5000 -geometry 80x48 -fn 10x20 -cr red -bg grey -e cl"
+    /bin/bash -c "\
+        cd /home/iraf; \
+        source .bashrc; \
+        conda activate iraf27; \
+        cd data; \
+        if [ ! -e login.cl ]
+        then
+            cp ../login.cl .
+            mkdir uparm
+        fi; \
+        xgterm -sb -sl 5000 -geometry 80x48 -fn 10x20 -cr red -bg grey -e cl \
+    "
 
 xhost - 127.0.0.1 > /dev/null 2>&1
