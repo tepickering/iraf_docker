@@ -12,6 +12,6 @@ docker run -ti --rm \
     -v /tmp/.X11-unix:/tmp/.X11-unix \
     -v $PWD:/home/iraf/data \
     iraf-community:latest \
-    /bin/bash -c "cd /home/iraf; export USER=iraf; pyraf"
+    /bin/bash -c "cd /home/iraf; export USER=iraf; export HOME=/home/iraf/data; pyraf"
 
 xhost - 127.0.0.1 > /dev/null 2>&1
