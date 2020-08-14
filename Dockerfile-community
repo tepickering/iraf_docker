@@ -1,4 +1,4 @@
-FROM tepickering/iraf-community:latest
+FROM tepickering/iraf-community-base:latest
 
 MAINTAINER T. E. Pickering "te.pickering@gmail.com"
 

@@ -17,7 +17,7 @@ docker run -ti --rm \
         export USER=iraf; \
         export HOME=/home/iraf/data; \
         cd data; \
-        xterm -sb -sl 5000 -geometry 80x48 -fn 10x20 -cr red -bg grey -e irafcl \
+        xgterm -sb -sl 5000 -geometry 80x48 -fn 10x20 -cr red -bg grey -e irafcl \
     "
 
 xhost - 127.0.0.1 > /dev/null 2>&1

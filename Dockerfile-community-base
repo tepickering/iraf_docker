@@ -1,7 +1,20 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 MAINTAINER T. E. Pickering "te.pickering@gmail.com"
 
+ENV DEBIAN_FRONTEND noninteractive
+ENV DEBCONF_NONINTERACTIVE_SEEN true
+
+RUN echo "tzdata tzdata/Areas select America" >> preseed.txt
+RUN echo "tzdata tzdata/Zones/America select Phoenix" >> preseed.txt
+RUN debconf-set-selections preseed.txt
+
 RUN apt -y update && apt -y upgrade && \
-apt -y install wget xterm saods9 tclxml cpl-plugin-giraf cpl-plugin-giraf-calib cpl-plugin-giraf-doc iraf iraf-dev iraf-noao \
-iraf-noao-dev iraf-rvsao iraf-wcstools python-pyraf python3-pyraf
+apt -y install wget xterm flex saods9 tclxml cpl-plugin-giraf cpl-plugin-giraf-calib cpl-plugin-giraf-doc iraf iraf-dev iraf-noao \
+iraf-noao-dev iraf-rvsao iraf-wcstools python3-pyraf gcc make libncurses-dev tcl-dev libxaw7-dev libxmu-dev xaw3dg-dev libxpm-dev byacc
+
+RUN wget https://github.com/iraf-community/x11iraf/archive/v2.0+2020.06.15.tar.gz && \
+tar xvvzf v2.0+2020.06.15.tar.gz && \
+cd x11iraf-2.0-2020.06.15 && \
+make && make install && \
+cd .. && rm -rf x11iraf-2.0-2020.06.15 v2.0+2020.06.15.tar.gz
