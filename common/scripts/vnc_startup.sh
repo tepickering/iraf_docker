@@ -15,7 +15,7 @@ consol/ubuntu-icewm-vnc
 consol/centos-icewm-vnc
 
 TAGS:
-latest  stable version of branch 'master'
+latest  stable version of branch 'main'
 dev     current development version of branch 'dev'
 
 OPTIONS:
